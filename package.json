@@ -1,12 +1,31 @@
 {
   "name": "easyadmin-core",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "version": "4.0.0",
+  "description": "Easy Admin System - CMS focused on easy use - Backend core (Node.js)",
+  "author": "Jan Elznic",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/easyadmin-system/easyadmin-core.git"
+  },
+  "bugs": {
+    "url": "https://github.com/easyadmin-system/easyadmin-core/issues"
+  },
+  "homepage": "https://github.com/easyadmin-system/easyadmin-core#readme",
+  "keywords": [
+    "cms",
+    "easyadmin",
+    "node",
+    "typescript"
+  ],
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
   "scripts": {
     "build": "nest build",
+    "dev": "npm run start:dev",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
