@@ -1,13 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, NotFoundException, ConflictException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
-const errorNotFound = (error, id) => {
+const errorNotFound = (error, str) => {
   throw new HttpException({
-    status: HttpStatus.NOT_FOUND,
-    message: `User #${id} not found`,
+    statusCode: HttpStatus.NOT_FOUND,
+    message: `User ${str} not found`,
   }, HttpStatus.NOT_FOUND, {
     cause: error
   });
@@ -18,8 +18,24 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    try {
+      let user: User = await this.usersService.findByUsername(createUserDto.username);
+      if (user) throw new ConflictException();
+      user = await this.usersService.create(createUserDto);
+
+      return {
+        statusCode: HttpStatus.CREATED,
+        message: `User ${user.username} successfully created`
+      }
+    } catch (error) { 
+      throw new HttpException({
+        statusCode: HttpStatus.CONFLICT,
+        message: `User ${createUserDto.username} already exists`,
+      }, HttpStatus.CONFLICT, {
+        cause: error
+      });
+    }
   }
 
   @Get()
@@ -27,14 +43,25 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
+  @Get('/id/:id')
+  async findById(@Param('id') id: string) {
     try {
-      const user: User = await this.usersService.findOne(+id);
+      const user: User = await this.usersService.findById(+id);
       if (!user) throw new NotFoundException();
       return user;
     } catch (error) { 
       errorNotFound(error, id);
+    }
+  }
+
+  @Get(':username')
+  async findByUsername(@Param('username') username: string) {
+    try {
+      const user: User = await this.usersService.findByUsername(username);
+      if (!user) throw new NotFoundException();
+      return user;
+    } catch (error) { 
+      errorNotFound(error, username);
     }
   }
 
@@ -46,11 +73,11 @@ export class UsersController {
   @Delete(':id')
   async remove(@Param('id') id: string) {
     try {
-      const user: User = await this.usersService.findOne(+id);
+      const user: User = await this.usersService.findById(+id);
       if (user) {
         await this.usersService.remove(+id);
         return {
-          status: HttpStatus.OK,
+          statusCode: HttpStatus.OK,
           message: `User ${user.username} successfully removed.`
         }
       }

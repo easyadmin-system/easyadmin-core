@@ -10,16 +10,20 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(createUserDto: CreateUserDto) {
+    return await this.usersRepository.save(createUserDto);
   }
 
   async findAll(): Promise<User[]> {
     return await this.usersRepository.find();
   }
 
-  async findOne(id: number): Promise<User | null> {
+  async findById(id: number): Promise<User | null> {
     return await this.usersRepository.findOneBy({ id });
+  }
+
+  async findByUsername(username: string): Promise<User | null> {
+    return await this.usersRepository.findOneBy({ username });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
