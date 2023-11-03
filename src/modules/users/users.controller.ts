@@ -13,7 +13,7 @@ const errorNotFound = (error, str) => {
   });
 }
 
-@Controller('users')
+@Controller('api/users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
