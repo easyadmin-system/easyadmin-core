@@ -1,4 +1,5 @@
-import { DataSource } from 'typeorm';
+import { DataSource, DatabaseType } from 'typeorm';
+import { Config } from '../config/configuration';
 
 export const databaseProviders = [
   {
@@ -6,11 +7,11 @@ export const databaseProviders = [
     useFactory: async () => {
       const dataSource = new DataSource({
         type: 'mysql',
-        host: 'localhost',
-        port: 3306,
-        username: 'root',
-        password: 'aaa',
-        database: 'test',
+        host: Config.db.host,
+        port: Config.db.port,
+        username: Config.db.username,
+        password: Config.db.password,
+        database: Config.db.database,
         entities: [
             __dirname + '/../**/*.entity{.ts,.js}',
         ],
@@ -21,4 +22,3 @@ export const databaseProviders = [
     },
   },
 ];
-

@@ -1,3 +1,7 @@
+# Configuration file
+.env
+.env.development
+
 # compiled output
 /dist
 /node_modules
