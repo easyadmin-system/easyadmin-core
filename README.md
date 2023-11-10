@@ -103,14 +103,24 @@ Easy Admin System - CMS focused on easy use - Backend core with RESTful API
    `npm install` or `npm i`
 
 
+5. Install wizard:
+
+   `cd bin && ./install.sh`
+
+
 ### Run in Docker container
 
-1. Build container by `Dockerfile`:
+1. Copy and edit environment configuration `.env` file:
+
+   `cp .env-example .env`
+
+
+2. Build container by `Dockerfile`:
 
    `docker build -t easyadmin-core .`
 
 
-2. Run container on port `3000`:
+3. Run container on port `3000`:
 
    `docker run -p 127.0.0.1:3000:3000 easyadmin-core`
 
