@@ -1,9 +1,16 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
 import { VersionModule } from './modules/version/version.module';
+import { AuthModule } from './auth/auth.module';
+import { AuthMiddleware } from './auth.middleware';
 
 @Module({
   imports: [
@@ -11,10 +18,27 @@ import { VersionModule } from './modules/version/version.module';
       isGlobal: true,
       envFilePath: ['.env'],
     }),
+    AuthModule,
     UsersModule,
     VersionModule
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware)
+      .exclude(
+        {
+          path: '/api/users',
+          method: RequestMethod.POST,
+        },
+        {
+          path: '/api/users/login',
+          method: RequestMethod.POST,
+        },
+      )
+      .forRoutes('');
+  }
+}

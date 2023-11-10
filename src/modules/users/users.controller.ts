@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpS
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { DtoHelperService } from './dto/dto-helper.service';
 import { User } from './entities/user.entity';
+import { UserI } from './users.interfaces';
 
 const errorNotFound = (error, str) => {
   throw new HttpException({
@@ -13,29 +15,19 @@ const errorNotFound = (error, str) => {
   });
 }
 
-@Controller('api/users')
+@Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private dtoHelperService: DtoHelperService,
+  ) {}
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
-    try {
-      let user: User = await this.usersService.findByUsername(createUserDto.username);
-      if (user) throw new ConflictException();
-      user = await this.usersService.create(createUserDto);
-
-      return {
-        statusCode: HttpStatus.CREATED,
-        message: `User ${user.username} successfully created`
-      }
-    } catch (error) { 
-      throw new HttpException({
-        statusCode: HttpStatus.CONFLICT,
-        message: `User ${createUserDto.username} already exists`,
-      }, HttpStatus.CONFLICT, {
-        cause: error
-      });
-    }
+  async create(@Body() createUserDto: CreateUserDto): Promise<UserI> {
+    const userEntity: UserI = await this.dtoHelperService.createUserDtoToEntity(
+      createUserDto,
+    );
+    return this.usersService.create(userEntity);
   }
 
   @Get()
@@ -46,7 +38,7 @@ export class UsersController {
   @Get('/id/:id')
   async findById(@Param('id') id: string) {
     try {
-      const user: User = await this.usersService.findById(+id);
+      const user: UserI = await this.usersService.getOneById(+id);
       if (!user) throw new NotFoundException();
       return user;
     } catch (error) { 
@@ -73,7 +65,7 @@ export class UsersController {
   @Delete(':id')
   async remove(@Param('id') id: string) {
     try {
-      const user: User = await this.usersService.findById(+id);
+      const user: UserI = await this.usersService.getOneById(+id);
       if (user) {
         await this.usersService.remove(+id);
         return {

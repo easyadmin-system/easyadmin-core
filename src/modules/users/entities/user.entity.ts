@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Connection } from './connection.entity';
 
 @Entity()
 export class User {
@@ -8,7 +16,10 @@ export class User {
   @Column({ unique: true, length: 60 })
   username: string;
 
-  @Column({ length: 255 })
+  @Column({ unique: true })
+  email: string;
+
+  @Column({ length: 255, select: false })
   password: string;
 
   @Column({ name: 'first_name', length: 50 })
@@ -16,4 +27,14 @@ export class User {
 
   @Column({ name: 'last_name', length: 50 })
   lastName: string;
+
+  @OneToMany(() => Connection, (connection) => connection.connectedUser)
+  connections: Connection[];
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  emailAndUsernameToLowerCase() {
+    this.email = this.email.toLowerCase();
+    this.username = this.username.toLowerCase();
+  }
 }

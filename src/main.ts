@@ -5,6 +5,7 @@ import { Config } from './config/configuration';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(Config.port);
 }

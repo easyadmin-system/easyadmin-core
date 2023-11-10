@@ -127,6 +127,7 @@ echo "DB_HOST=${DB_HOST}" >> $CONFIG_FILE
 echo "DB_USERNAME=${DB_USERNAME}" >> $CONFIG_FILE
 echo "DB_PASSWORD=${DB_PASSWORD}" >> $CONFIG_FILE
 echo "DB_DATABASE=${DB_DATABASE}" >> $CONFIG_FILE
+echo "JWT_SECRET=hlaskdhaio1237891aa" >> $CONFIG_FILE
 
 
 # Other directories
