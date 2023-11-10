@@ -11,13 +11,9 @@ export class CreateUserDto {
   @MaxLength(255)
   readonly password: string;
 
-  @IsNotEmpty()
-  @MinLength(1)
   @MaxLength(50)
   readonly firstName: string;
 
-  @IsNotEmpty()
-  @MinLength(1)
   @MaxLength(50)
   readonly lastName: string;
 }
