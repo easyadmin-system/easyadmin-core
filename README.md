@@ -117,12 +117,12 @@ Easy Admin System - CMS focused on easy use - Backend core with RESTful API
 
 2. Build container by `Dockerfile`:
 
-   `docker build -t easyadmin-core .`
+   `docker build -t easyadmin-core . --target development`
 
 
 3. Run container on port `3000`:
 
-   `docker run -p 127.0.0.1:3000:3000 easyadmin-core`
+   `docker run -p 0.0.0.0:3000:3000 easyadmin-core`
 
 
 ### NPM Scripts

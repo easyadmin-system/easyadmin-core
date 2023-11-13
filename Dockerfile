@@ -1,42 +1,38 @@
-FROM node:alpine AS production
+# development
+FROM node:20.9.0 AS development
+
+ARG NODE_ENV=development
+ENV NODE_ENV=${NODE_ENV}
+
 WORKDIR /srv/app
+
 COPY package*.json ./
+COPY tsconfig.build.json ./
+COPY tsconfig.json ./
 
-# ARG NODE_ENV=production
-# ENV NODE_ENV=${NODE_ENV}
-
-# RUN npm ci
 RUN npm install --verbose
 COPY . .
 RUN npm run build
 
 EXPOSE 3000
-CMD [ "node", "dist/main" ]
 
-# Specify Node Version and Image
-# FROM node:16.16.0 AS development
+CMD ["node", "dist/main" ]
 
-# # Specify the working dir
-# WORKDIR /srv/app
+# production
+FROM node:20.9.0 AS production
 
-# COPY package*.json ./
-# COPY tsconfig.build.json ./
-# COPY tsconfig.json ./
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
 
-# RUN npm ci
-# RUN npm run build
+WORKDIR /srv/app
 
-# EXPOSE 3000
+COPY --from=development /srv/app/ .
+COPY .env-example ./.env
 
-# FROM node:16.16.0 as production
+RUN npm install --verbose
+COPY . .
+RUN npm run build
 
-# ARG NODE_ENV=production
-# ENV NODE_ENV=${NODE_ENV}
+EXPOSE 3000
 
-# WORKDIR /srv/app
-
-# COPY --from=development /srv/app/ .
-
-# EXPOSE 3000
-
-# CMD ["node", "dist/main.js" ]
+CMD ["node", "dist/main" ]
