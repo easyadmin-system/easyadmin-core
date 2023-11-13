@@ -33,7 +33,7 @@
     "_prestart:prod": "rimraf dist/ && rimraf node_modules/ && rimraf .env",
     "reinstall": "npm run uninstall && npm install",
     "start": "nest start",
-    "start:dev": "nest start --watch",
+    "start:dev": "TEST=blabla nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "structure": "tree -l infinity --ignore node_modules",
