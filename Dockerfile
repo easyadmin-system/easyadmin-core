@@ -26,7 +26,10 @@ ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /srv/app
 
-COPY --from=development /srv/app/ .
+COPY package*.json ./
+COPY tsconfig.build.json ./
+COPY tsconfig.json ./
+
 COPY .env-example ./.env
 
 RUN npm install --verbose
