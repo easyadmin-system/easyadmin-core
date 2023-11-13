@@ -1,7 +1,6 @@
 FROM node:alpine AS production
 WORKDIR /srv/app
 COPY package*.json ./
-COPY .env-example ./.env
 
 RUN npm install --verbose
 COPY . .
