@@ -1,5 +1,5 @@
 # development
-FROM node:20.9.0 AS development
+FROM node:alpine AS development
 
 ARG NODE_ENV=development
 ENV NODE_ENV=${NODE_ENV}
@@ -19,7 +19,7 @@ EXPOSE 3000
 CMD ["node", "dist/main" ]
 
 # production
-FROM node:20.9.0 AS production
+FROM node:alpine AS production
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
