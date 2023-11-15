@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, NotFoundException, ConflictException } from '@nestjs/common';
+import { ApiExtension, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -16,6 +17,7 @@ const errorNotFound = (error, str) => {
   });
 }
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(
@@ -23,6 +25,7 @@ export class UsersController {
     private dtoHelperService: DtoHelperService,
   ) {}
 
+  @ApiOperation({ summary: 'Create a user' })
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<UserI> {
     const userEntity: UserI = await this.dtoHelperService.createUserDtoToEntity(
@@ -31,11 +34,13 @@ export class UsersController {
     return this.usersService.create(userEntity);
   }
 
+  @ApiOperation({ summary: 'List all users' })
   @Get()
-  findAll() {
+  findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
+  @ApiOperation({ summary: 'Get user by Id' })
   @Get('/id/:id')
   async findById(@Param('id') id: string) {
     try {
@@ -47,6 +52,7 @@ export class UsersController {
     }
   }
 
+  @ApiOperation({ summary: 'Get user by username' })
   @Get(':username')
   async findByUsername(@Param('username') username: string) {
     try {
@@ -58,11 +64,13 @@ export class UsersController {
     }
   }
 
+  @ApiOperation({ summary: 'Update user by Id' })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
   }
 
+  @ApiOperation({ summary: 'Delete user by Id' })
   @Delete(':id')
   async remove(@Param('id') id: string) {
     try {
@@ -80,6 +88,7 @@ export class UsersController {
     }
   }
 
+  @ApiOperation({ summary: 'Login user by email and password' })
   @Post('login')
   async login(@Body() loginUserDto: LoginUserDto): Promise<LoginResponseI> {
     const userEntity: UserI = await this.dtoHelperService.loginUserDtoToEntity(

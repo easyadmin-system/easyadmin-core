@@ -1,15 +1,28 @@
 import { LoginUserDto } from './login-user.dto';
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, MaxLength, MinLength } from 'class-validator';
 
 export class CreateUserDto extends LoginUserDto {
+  @ApiProperty({
+    example: 'admin',
+    required: true
+  })
   @IsNotEmpty()
   @MinLength(3)
   @MaxLength(60)
-  readonly username: string;
+  username: string;
 
+  @ApiProperty({
+    example: 'John',
+    required: true
+  })
   @MaxLength(50)
-  readonly firstName: string;
+  firstName: string;
 
+  @ApiProperty({
+    example: 'Doe',
+    required: true
+  })
   @MaxLength(50)
-  readonly lastName: string;
+  lastName: string;
 }
