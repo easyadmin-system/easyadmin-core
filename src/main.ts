@@ -6,7 +6,6 @@ import { Config } from './config/configuration';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
 
   const swaggerConfig = new DocumentBuilder()
@@ -24,7 +23,8 @@ async function bootstrap() {
   };
 
   const document = SwaggerModule.createDocument(app, swaggerConfig, swaggerOptions);
-  SwaggerModule.setup('swagger', app, document);
+  console.log(JSON.stringify(document))
+  SwaggerModule.setup('api', app, document);
 
   await app.listen(Config.port);
 }

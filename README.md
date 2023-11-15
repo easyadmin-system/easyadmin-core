@@ -36,6 +36,7 @@ Easy Admin System - CMS focused on easy use - Backend core with RESTful API
       - [Git Branches](#git-branches)
     - [Development Environment](#development-environment)
     - [API](#api)
+      - [OpenAPI](#openapi)
       - [Swagger](#swagger)
   - [Directory structure](#directory-structure)
   - [License](#license)
@@ -180,6 +181,10 @@ You can use built-in development server that will monitor for any changes in you
 
 
 ### API
+
+#### OpenAPI
+* OpenAPI specification and schema is available in `openapi.yaml` file in repository root (this file is auto-generated!)
+* You can download OpenAPI JSON schema from `http://localhost:3000/api-json/` or YAML schema from `http://localhost:3000/api-yaml/`
 
 #### Swagger
 * [Swagger UI](https://swagger.io/) is available on `http://localhost:3000/swagger/`
